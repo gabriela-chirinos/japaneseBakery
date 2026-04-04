@@ -26,6 +26,7 @@ export default function PhilosophyPanel({ isActive, justEntered }) {
         display: 'flex',
         flexDirection: 'column',
         overflowY: 'auto',
+        overflowX: 'hidden',
       }}
     >
       <div

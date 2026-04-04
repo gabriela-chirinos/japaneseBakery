@@ -1,14 +1,14 @@
 // src/components/mascot/CopperCrescent.jsx
 import { motion } from 'framer-motion'
 
-export default function CopperCrescent({ size = 40, style = {} }) {
+export default function CopperCrescent({ size = 40, style = {}, animate = true }) {
   return (
     <motion.div
       style={{ display: 'inline-block', ...style }}
-      animate={{
+      animate={animate ? {
         rotate: 360,
         y: [0, -8, 0],
-      }}
+      } : { rotate: 0, y: 0 }}
       transition={{
         rotate: { duration: 20, ease: 'linear', repeat: Infinity },
         y: { duration: 4, ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' },

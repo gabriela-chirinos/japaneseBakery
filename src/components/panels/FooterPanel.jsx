@@ -154,7 +154,7 @@ export default function FooterPanel({ isActive, justEntered }) {
           <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: '11px', color: 'rgba(244,240,232,0.4)', letterSpacing: '1px', textTransform: 'uppercase' }}>
             © 2026 PAN 製パン所 INC. ALL RIGHTS RESERVED. MADE IN NIIGATA.
           </p>
-          <PanKun size={32} color="rgba(244,240,232,0.5)" variant="small" animate={false} />
+          <PanKun size={32} color="rgba(244,240,232,0.5)" variant="default" animate={false} />
         </motion.div>
       </div>
     </section>

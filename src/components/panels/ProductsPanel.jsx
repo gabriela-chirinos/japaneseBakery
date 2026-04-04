@@ -1,4 +1,5 @@
 // src/components/panels/ProductsPanel.jsx
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import SectionLabel from '../ui/SectionLabel.jsx'
 import ProductCard  from '../ui/ProductCard.jsx'
@@ -15,7 +16,14 @@ const fadeUp = (delay = 0) => ({
 
 export default function ProductsPanel({ isActive, justEntered }) {
   const shouldAnimate = isActive || justEntered
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== 'undefined' && window.innerWidth < 1024
+  )
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 1024)
+    window.addEventListener('resize', handler)
+    return () => window.removeEventListener('resize', handler)
+  }, [])
 
   return (
     <section
