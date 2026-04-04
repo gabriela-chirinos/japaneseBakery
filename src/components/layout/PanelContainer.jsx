@@ -1,4 +1,3 @@
-// src/components/layout/PanelContainer.jsx
 import { useRef, useEffect, useState, useCallback } from 'react'
 import gsap from 'gsap'
 import useHorizontalScroll from '../../hooks/useHorizontalScroll.js'
@@ -25,18 +24,29 @@ function useIsMobile() {
   return isMobile
 }
 
+function useReducedMotionPref() {
+  const [reduced, setReduced] = useState(
+    typeof window !== 'undefined'
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false
+  )
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const handler = (e) => setReduced(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+  return reduced
+}
+
 export default function PanelContainer({ onPanelChange, onRegisterNavigate }) {
   const isMobile = useIsMobile()
+  const prefersReducedMotion = useReducedMotionPref()
   const panelRefs = useRef([])
   const [current, setCurrent] = useState(0)
   const [enteredIndex, setEnteredIndex] = useState(0)
   const isAnimating = useRef(false)
   const currentRef = useRef(0)
-
-  const prefersReducedMotion =
-    typeof window !== 'undefined'
-      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      : false
 
   const transitionTo = useCallback((nextIndex, fast = false) => {
     if (isAnimating.current) return
@@ -57,7 +67,10 @@ export default function PanelContainer({ onPanelChange, onRegisterNavigate }) {
       setEnteredIndex(nextIndex)
     } else {
       if (currentEl) {
-        gsap.to(currentEl, { xPercent: -100 * direction, duration, ease: 'power3.out' })
+        gsap.fromTo(currentEl,
+          { xPercent: 0 },
+          { xPercent: -100 * direction, duration, ease: 'power3.out' }
+        )
       }
       if (nextEl) {
         gsap.fromTo(
@@ -73,6 +86,9 @@ export default function PanelContainer({ onPanelChange, onRegisterNavigate }) {
             },
           }
         )
+      } else {
+        // Panel not mounted (outside render window) — unlock immediately
+        isAnimating.current = false
       }
     }
 
@@ -81,7 +97,7 @@ export default function PanelContainer({ onPanelChange, onRegisterNavigate }) {
     onPanelChange?.(nextIndex)
   }, [onPanelChange, prefersReducedMotion])
 
-  // Expose navigation function to parent (for PersistentUI nav clicks)
+  // Expose navigation to parent (for PersistentUI nav clicks)
   useEffect(() => {
     onRegisterNavigate?.(transitionTo)
   }, [transitionTo, onRegisterNavigate])
@@ -93,10 +109,10 @@ export default function PanelContainer({ onPanelChange, onRegisterNavigate }) {
     enabled: !isMobile,
   })
 
-  // Mobile swipe
+  // Mobile swipe — use currentRef to avoid stale closure
   const { ref: swipeRef } = useSwipe({
-    onSwipeLeft:  ({ fast }) => transitionTo(current + 1, fast),
-    onSwipeRight: ({ fast }) => transitionTo(current - 1, fast),
+    onSwipeLeft:  ({ fast }) => transitionTo(currentRef.current + 1, fast),
+    onSwipeRight: ({ fast }) => transitionTo(currentRef.current - 1, fast),
     threshold: 50,
   })
 
@@ -117,7 +133,6 @@ export default function PanelContainer({ onPanelChange, onRegisterNavigate }) {
       aria-live="polite"
     >
       {PANELS.map((PanelComponent, i) => {
-        // Only render current ±1 panels to save memory
         if (Math.abs(i - current) > 1) return null
 
         return (
