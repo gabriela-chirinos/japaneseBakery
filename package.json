@@ -1,5 +1,5 @@
 {
-  "name": "vite-temp",
+  "name": "pan-bakery",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "framer-motion": "^12.38.0",
@@ -17,6 +19,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
+    "@rolldown/binding-darwin-x64": "^1.0.0-rc.12",
     "@tailwindcss/typography": "^0.5.19",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
