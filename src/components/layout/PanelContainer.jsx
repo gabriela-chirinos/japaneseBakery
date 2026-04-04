@@ -1,0 +1,145 @@
+// src/components/layout/PanelContainer.jsx
+import { useRef, useEffect, useState, useCallback } from 'react'
+import gsap from 'gsap'
+import useHorizontalScroll from '../../hooks/useHorizontalScroll.js'
+import useSwipe from '../../hooks/useSwipe.js'
+
+import HeroPanel       from '../panels/HeroPanel.jsx'
+import ProductsPanel   from '../panels/ProductsPanel.jsx'
+import PhilosophyPanel from '../panels/PhilosophyPanel.jsx'
+import FooterPanel     from '../panels/FooterPanel.jsx'
+
+const PANELS = [HeroPanel, ProductsPanel, PhilosophyPanel, FooterPanel]
+const TOTAL  = PANELS.length
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== 'undefined' ? window.innerWidth < 1024 : false
+  )
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 1023px)')
+    const handler = (e) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+  return isMobile
+}
+
+export default function PanelContainer({ onPanelChange, onRegisterNavigate }) {
+  const isMobile = useIsMobile()
+  const panelRefs = useRef([])
+  const [current, setCurrent] = useState(0)
+  const [enteredIndex, setEnteredIndex] = useState(0)
+  const isAnimating = useRef(false)
+  const currentRef = useRef(0)
+
+  const prefersReducedMotion =
+    typeof window !== 'undefined'
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false
+
+  const transitionTo = useCallback((nextIndex, fast = false) => {
+    if (isAnimating.current) return
+    if (nextIndex < 0 || nextIndex >= TOTAL) return
+    if (nextIndex === currentRef.current) return
+
+    isAnimating.current = true
+    const duration = fast ? 0.5 : 0.7
+    const direction = nextIndex > currentRef.current ? 1 : -1
+
+    const currentEl = panelRefs.current[currentRef.current]
+    const nextEl    = panelRefs.current[nextIndex]
+
+    if (prefersReducedMotion) {
+      if (currentEl) gsap.set(currentEl, { xPercent: -100 * direction })
+      if (nextEl)    gsap.set(nextEl,    { xPercent: 0 })
+      isAnimating.current = false
+      setEnteredIndex(nextIndex)
+    } else {
+      if (currentEl) {
+        gsap.to(currentEl, { xPercent: -100 * direction, duration, ease: 'power3.out' })
+      }
+      if (nextEl) {
+        gsap.fromTo(
+          nextEl,
+          { xPercent: 100 * direction },
+          {
+            xPercent: 0,
+            duration,
+            ease: 'power3.out',
+            onComplete: () => {
+              isAnimating.current = false
+              setEnteredIndex(nextIndex)
+            },
+          }
+        )
+      }
+    }
+
+    currentRef.current = nextIndex
+    setCurrent(nextIndex)
+    onPanelChange?.(nextIndex)
+  }, [onPanelChange, prefersReducedMotion])
+
+  // Expose navigation function to parent (for PersistentUI nav clicks)
+  useEffect(() => {
+    onRegisterNavigate?.(transitionTo)
+  }, [transitionTo, onRegisterNavigate])
+
+  // Desktop scroll engine (disabled on mobile)
+  useHorizontalScroll({
+    totalPanels: TOTAL,
+    onPanelChange: transitionTo,
+    enabled: !isMobile,
+  })
+
+  // Mobile swipe
+  const { ref: swipeRef } = useSwipe({
+    onSwipeLeft:  ({ fast }) => transitionTo(current + 1, fast),
+    onSwipeRight: ({ fast }) => transitionTo(current - 1, fast),
+    threshold: 50,
+  })
+
+  // Set initial panel positions on mount
+  useEffect(() => {
+    PANELS.forEach((_, i) => {
+      const el = panelRefs.current[i]
+      if (!el) return
+      gsap.set(el, { xPercent: i === 0 ? 0 : 100 })
+    })
+  }, [])
+
+  return (
+    <div
+      id="main-content"
+      ref={swipeRef}
+      style={{ position: 'fixed', inset: 0, overflow: 'hidden' }}
+      aria-live="polite"
+    >
+      {PANELS.map((PanelComponent, i) => {
+        // Only render current ±1 panels to save memory
+        if (Math.abs(i - current) > 1) return null
+
+        return (
+          <div
+            key={i}
+            ref={el => { panelRefs.current[i] = el }}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100vw',
+              height: '100vh',
+              willChange: 'transform',
+            }}
+            aria-hidden={i !== current}
+          >
+            <PanelComponent
+              isActive={i === current}
+              justEntered={i === enteredIndex}
+            />
+          </div>
+        )
+      })}
+    </div>
+  )
+}
