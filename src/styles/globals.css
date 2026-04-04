@@ -30,6 +30,7 @@ body {
   color: var(--shio);
   font-family: "DM Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Grain overlay — fixed, covers entire viewport, pointer-events none */
@@ -42,7 +43,7 @@ body::after {
   background-size: 200px 200px;
   opacity: 0.04;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 100;
 }
 
 /* Reduced motion: disable all transitions and animations */
