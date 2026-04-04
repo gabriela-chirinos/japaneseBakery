@@ -1,5 +1,5 @@
 // src/components/mascot/PanKun.jsx
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 
 const floatVariants = {
   idle: {
@@ -36,8 +36,10 @@ export default function PanKun({
   className = '',
 }) {
   const height = Math.round(size * (70 / 80))
+  const prefersReduced = useReducedMotion()
+  const effectiveAnimate = animate && !prefersReduced
 
-  const shouldFloat = animate && (variant === 'default' || variant === 'sitting')
+  const shouldFloat = effectiveAnimate && (variant === 'default' || variant === 'sitting')
 
   const svgContent = (
     <svg
@@ -69,7 +71,7 @@ export default function PanKun({
     </svg>
   )
 
-  if (!animate) return svgContent
+  if (!effectiveAnimate) return svgContent
 
   return (
     <motion.div
