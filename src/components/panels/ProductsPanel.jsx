@@ -1,10 +1,10 @@
 // src/components/panels/ProductsPanel.jsx
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import SectionLabel from '../ui/SectionLabel.jsx'
 import ProductCard  from '../ui/ProductCard.jsx'
 import PanKun       from '../mascot/PanKun.jsx'
 import { products } from '../../data/products.js'
+import useIsMobile  from '../../hooks/useIsMobile.js'
 
 const fadeUp = (delay = 0) => ({
   hidden:  { opacity: 0, y: 24, scale: 0.97 },
@@ -16,14 +16,8 @@ const fadeUp = (delay = 0) => ({
 
 export default function ProductsPanel({ isActive, justEntered }) {
   const shouldAnimate = isActive || justEntered
-  const [isMobile, setIsMobile] = useState(
-    typeof window !== 'undefined' && window.innerWidth < 1024
-  )
-  useEffect(() => {
-    const handler = () => setIsMobile(window.innerWidth < 1024)
-    window.addEventListener('resize', handler)
-    return () => window.removeEventListener('resize', handler)
-  }, [])
+  const prefersReduced = useReducedMotion()
+  const isMobile = useIsMobile()
 
   return (
     <section
@@ -42,7 +36,7 @@ export default function ProductsPanel({ isActive, justEntered }) {
         <motion.div
           variants={fadeUp(0)}
           initial="hidden"
-          animate={shouldAnimate ? 'visible' : 'hidden'}
+          animate={shouldAnimate && !prefersReduced ? 'visible' : 'hidden'}
         >
           <SectionLabel number="01" label="SELECT BAKES" labelJp="セレクト" />
         </motion.div>
@@ -55,7 +49,7 @@ export default function ProductsPanel({ isActive, justEntered }) {
                 key={product.id}
                 variants={fadeUp(0.15 + i * 0.1)}
                 initial="hidden"
-                animate={shouldAnimate ? 'visible' : 'hidden'}
+                animate={shouldAnimate && !prefersReduced ? 'visible' : 'hidden'}
               >
                 <ProductCard product={product} />
               </motion.div>
@@ -74,7 +68,7 @@ export default function ProductsPanel({ isActive, justEntered }) {
             <motion.div
               variants={fadeUp(0.15)}
               initial="hidden"
-              animate={shouldAnimate ? 'visible' : 'hidden'}
+              animate={shouldAnimate && !prefersReduced ? 'visible' : 'hidden'}
               style={{ gridColumn: '1', gridRow: '1' }}
             >
               <ProductCard product={products[0]} />
@@ -82,7 +76,7 @@ export default function ProductsPanel({ isActive, justEntered }) {
             <motion.div
               variants={fadeUp(0.25)}
               initial="hidden"
-              animate={shouldAnimate ? 'visible' : 'hidden'}
+              animate={shouldAnimate && !prefersReduced ? 'visible' : 'hidden'}
               style={{ gridColumn: '2', gridRow: '1' }}
             >
               <ProductCard product={products[1]} />
@@ -90,7 +84,7 @@ export default function ProductsPanel({ isActive, justEntered }) {
             <motion.div
               variants={fadeUp(0.35)}
               initial="hidden"
-              animate={shouldAnimate ? 'visible' : 'hidden'}
+              animate={shouldAnimate && !prefersReduced ? 'visible' : 'hidden'}
               style={{ gridColumn: '1 / -1', gridRow: '2' }}
             >
               <ProductCard product={products[2]} />

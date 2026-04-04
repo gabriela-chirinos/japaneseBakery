@@ -1,5 +1,5 @@
 // src/components/panels/FooterPanel.jsx
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import SectionLabel from '../ui/SectionLabel.jsx'
 import PanKun       from '../mascot/PanKun.jsx'
 
@@ -33,6 +33,7 @@ const addressStyle = {
 
 export default function FooterPanel({ isActive, justEntered }) {
   const shouldAnimate = isActive || justEntered
+  const prefersReduced = useReducedMotion()
 
   return (
     <section
@@ -52,7 +53,7 @@ export default function FooterPanel({ isActive, justEntered }) {
         <motion.div
           variants={fadeUp(0)}
           initial="hidden"
-          animate={shouldAnimate ? 'visible' : 'hidden'}
+          animate={shouldAnimate && !prefersReduced ? 'visible' : 'hidden'}
         >
           <SectionLabel number="03" label="LOGISTICS" labelJp="連絡" />
         </motion.div>
@@ -65,7 +66,7 @@ export default function FooterPanel({ isActive, justEntered }) {
             marginTop: '40px',
           }}
         >
-          <motion.div variants={fadeUp(0.1)} initial="hidden" animate={shouldAnimate ? 'visible' : 'hidden'}>
+          <motion.div variants={fadeUp(0.1)} initial="hidden" animate={shouldAnimate && !prefersReduced ? 'visible' : 'hidden'}>
             <p style={labelStyle}>HEADQUARTERS</p>
             <p style={addressStyle}>
               1-24-9 TOCHIGI-KEN<br />
@@ -75,7 +76,7 @@ export default function FooterPanel({ isActive, justEntered }) {
             </p>
           </motion.div>
 
-          <motion.div variants={fadeUp(0.15)} initial="hidden" animate={shouldAnimate ? 'visible' : 'hidden'}>
+          <motion.div variants={fadeUp(0.15)} initial="hidden" animate={shouldAnimate && !prefersReduced ? 'visible' : 'hidden'}>
             <p style={labelStyle}>DIGITAL FOOTPRINT</p>
             <p style={addressStyle}>
               @PAN_SEIBANJO<br />
@@ -102,7 +103,7 @@ export default function FooterPanel({ isActive, justEntered }) {
         <motion.div
           variants={fadeUp(0.2)}
           initial="hidden"
-          animate={shouldAnimate ? 'visible' : 'hidden'}
+          animate={shouldAnimate && !prefersReduced ? 'visible' : 'hidden'}
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
@@ -141,7 +142,7 @@ export default function FooterPanel({ isActive, justEntered }) {
         <motion.div
           variants={fadeUp(0.3)}
           initial="hidden"
-          animate={shouldAnimate ? 'visible' : 'hidden'}
+          animate={shouldAnimate && !prefersReduced ? 'visible' : 'hidden'}
           style={{
             display: 'flex',
             justifyContent: 'space-between',

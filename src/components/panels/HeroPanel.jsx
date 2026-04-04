@@ -1,5 +1,5 @@
 // src/components/panels/HeroPanel.jsx
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import PanKun         from '../mascot/PanKun.jsx'
 import CopperCrescent from '../mascot/CopperCrescent.jsx'
 
@@ -14,6 +14,7 @@ const fadeUp = {
 }
 
 export default function HeroPanel({ isActive, justEntered }) {
+  const prefersReduced = useReducedMotion()
   const shouldAnimate = isActive || justEntered
 
   return (
@@ -49,7 +50,7 @@ export default function HeroPanel({ isActive, justEntered }) {
       <motion.div
         variants={stagger}
         initial="hidden"
-        animate={shouldAnimate ? 'visible' : 'hidden'}
+        animate={shouldAnimate && !prefersReduced ? 'visible' : 'hidden'}
         style={{ textAlign: 'center', zIndex: 1 }}
       >
         <motion.h1

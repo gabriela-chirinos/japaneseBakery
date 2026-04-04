@@ -1,5 +1,5 @@
 // src/components/panels/PhilosophyPanel.jsx
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import SectionLabel from '../ui/SectionLabel.jsx'
 import Button       from '../ui/Button.jsx'
 import PanKun       from '../mascot/PanKun.jsx'
@@ -14,6 +14,7 @@ const fadeUp = (delay = 0) => ({
 
 export default function PhilosophyPanel({ isActive, justEntered }) {
   const shouldAnimate = isActive || justEntered
+  const prefersReduced = useReducedMotion()
 
   return (
     <section
@@ -44,7 +45,7 @@ export default function PhilosophyPanel({ isActive, justEntered }) {
           className="w-full mb-16"
           variants={fadeUp(0)}
           initial="hidden"
-          animate={shouldAnimate ? 'visible' : 'hidden'}
+          animate={shouldAnimate && !prefersReduced ? 'visible' : 'hidden'}
           style={{ width: '100%', marginBottom: '64px' }}
         >
           <SectionLabel number="02" label="THE PHILOSOPHY" labelJp="哲学" />
@@ -53,7 +54,7 @@ export default function PhilosophyPanel({ isActive, justEntered }) {
         <motion.blockquote
           variants={fadeUp(0.1)}
           initial="hidden"
-          animate={shouldAnimate ? 'visible' : 'hidden'}
+          animate={shouldAnimate && !prefersReduced ? 'visible' : 'hidden'}
           style={{ maxWidth: '800px' }}
         >
           <p
@@ -74,7 +75,7 @@ export default function PhilosophyPanel({ isActive, justEntered }) {
         <motion.p
           variants={fadeUp(0.2)}
           initial="hidden"
-          animate={shouldAnimate ? 'visible' : 'hidden'}
+          animate={shouldAnimate && !prefersReduced ? 'visible' : 'hidden'}
           style={{
             fontFamily: '"DM Sans", sans-serif',
             fontWeight: 300,
@@ -96,7 +97,7 @@ export default function PhilosophyPanel({ isActive, justEntered }) {
         <motion.div
           variants={fadeUp(0.3)}
           initial="hidden"
-          animate={shouldAnimate ? 'visible' : 'hidden'}
+          animate={shouldAnimate && !prefersReduced ? 'visible' : 'hidden'}
           style={{ marginTop: '48px' }}
         >
           <Button>VISIT THE WORKSHOP →</Button>

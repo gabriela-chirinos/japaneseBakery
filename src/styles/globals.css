@@ -57,3 +57,9 @@ body::after {
 /* Hide scrollbars on overflow panels */
 .panel-scrollable::-webkit-scrollbar { display: none; }
 .panel-scrollable { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Focus visible ring for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--akagane);
+  outline-offset: 3px;
+}
