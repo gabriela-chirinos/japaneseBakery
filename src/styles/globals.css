@@ -53,3 +53,7 @@ body::after {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Hide scrollbars on overflow panels */
+.panel-scrollable::-webkit-scrollbar { display: none; }
+.panel-scrollable { -ms-overflow-style: none; scrollbar-width: none; }
