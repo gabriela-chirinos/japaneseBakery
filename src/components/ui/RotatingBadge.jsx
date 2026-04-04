@@ -20,9 +20,6 @@ export default function RotatingBadge({ text = 'BAKED IN NIIGATA · SEASONAL FLO
           from { transform: rotate(0deg); }
           to   { transform: rotate(360deg); }
         }
-        @media (prefers-reduced-motion: reduce) {
-          svg[role="img"] { animation: none !important; }
-        }
       `}</style>
       <defs>
         <path
