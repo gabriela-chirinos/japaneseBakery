@@ -5,7 +5,7 @@ import DotIndicator from './DotIndicator.jsx'
 // Panels 1 and 2 have cream backgrounds — nav text should be dark
 const LIGHT_MODE_PANELS = [1, 2]
 
-export default function PersistentUI({ currentPanel, onNavigate, isMobile }) {
+export default function PersistentUI({ currentPanel, onNavigate, isMobile, totalPanels = 4 }) {
   const lightMode = LIGHT_MODE_PANELS.includes(currentPanel)
 
   return (
@@ -101,7 +101,7 @@ export default function PersistentUI({ currentPanel, onNavigate, isMobile }) {
       {/* Bottom dot indicators — mobile only */}
       {isMobile && (
         <DotIndicator
-          total={4}
+          total={totalPanels}
           current={currentPanel}
           onDotClick={onNavigate}
         />
