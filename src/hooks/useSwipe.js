@@ -11,6 +11,11 @@ export default function useSwipe({ onSwipeLeft, onSwipeRight, threshold = 50 } =
   const ref = useRef(null)
   const startX = useRef(null)
   const startTime = useRef(null)
+  const onSwipeLeftRef = useRef(onSwipeLeft)
+  const onSwipeRightRef = useRef(onSwipeRight)
+
+  useEffect(() => { onSwipeLeftRef.current = onSwipeLeft }, [onSwipeLeft])
+  useEffect(() => { onSwipeRightRef.current = onSwipeRight }, [onSwipeRight])
 
   useEffect(() => {
     const el = ref.current
@@ -26,16 +31,16 @@ export default function useSwipe({ onSwipeLeft, onSwipeRight, threshold = 50 } =
       const endX = e.changedTouches[0].clientX
       const delta = endX - startX.current
       const elapsed = Date.now() - startTime.current
-      const velocity = Math.abs(delta) / elapsed
+      const velocity = elapsed > 0 ? Math.abs(delta) / elapsed : 0
 
       if (Math.abs(delta) < threshold) return
 
       const fast = velocity > 0.5
 
       if (delta < 0) {
-        onSwipeLeft?.({ fast })
+        onSwipeLeftRef.current?.({ fast })
       } else {
-        onSwipeRight?.({ fast })
+        onSwipeRightRef.current?.({ fast })
       }
 
       startX.current = null
@@ -48,7 +53,7 @@ export default function useSwipe({ onSwipeLeft, onSwipeRight, threshold = 50 } =
       el.removeEventListener('touchstart', handleTouchStart)
       el.removeEventListener('touchend', handleTouchEnd)
     }
-  }, [onSwipeLeft, onSwipeRight, threshold])
+  }, [threshold])
 
   return { ref }
 }
