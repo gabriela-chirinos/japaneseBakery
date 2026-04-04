@@ -116,6 +116,7 @@ export default function PanelContainer({ onPanelChange, onRegisterNavigate }) {
   return (
     <div
       id="main-content"
+      role="main"
       ref={swipeRef}
       style={{ position: 'fixed', inset: 0, overflow: 'hidden' }}
       aria-live="polite"

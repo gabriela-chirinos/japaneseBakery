@@ -30,6 +30,7 @@ export default function VerticalNav({ current, onNavigate, lightMode = false }) 
         return (
           <button
             key={i}
+            type="button"
             onClick={() => onNavigate(item.panel)}
             aria-current={isActive ? 'true' : undefined}
             style={{

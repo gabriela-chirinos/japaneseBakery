@@ -5,6 +5,7 @@ export default function Button({ children, onClick, className = '', dark = false
 
   return (
     <button
+      type="button"
       onClick={onClick}
       className={`font-body font-medium uppercase cursor-pointer transition-all ${className}`}
       style={{

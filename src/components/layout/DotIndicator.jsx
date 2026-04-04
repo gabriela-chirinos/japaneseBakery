@@ -17,6 +17,7 @@ export default function DotIndicator({ total, current, onDotClick }) {
       {Array.from({ length: total }).map((_, i) => (
         <button
           key={i}
+          type="button"
           aria-label={`Go to panel ${i + 1}`}
           aria-current={i === current ? 'true' : undefined}
           onClick={() => onDotClick(i)}

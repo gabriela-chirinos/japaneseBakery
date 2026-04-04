@@ -8,6 +8,7 @@ export default function SectionLabel({ number, label, labelJp, className = '' })
         [ {number} ] {label}{labelJp ? ` / ${labelJp}` : ''}
       </span>
       <div
+        aria-hidden="true"
         className="flex-1 h-px"
         style={{ backgroundColor: 'rgba(196,112,63,0.3)' }}
       />
