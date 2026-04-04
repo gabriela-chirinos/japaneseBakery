@@ -1,7 +1,8 @@
 import { useRef, useEffect, useState, useCallback } from 'react'
 import gsap from 'gsap'
 import useHorizontalScroll from '../../hooks/useHorizontalScroll.js'
-import useSwipe from '../../hooks/useSwipe.js'
+import useSwipe   from '../../hooks/useSwipe.js'
+import useIsMobile from '../../hooks/useIsMobile.js'
 
 import HeroPanel       from '../panels/HeroPanel.jsx'
 import ProductsPanel   from '../panels/ProductsPanel.jsx'
@@ -10,19 +11,6 @@ import FooterPanel     from '../panels/FooterPanel.jsx'
 
 const PANELS = [HeroPanel, ProductsPanel, PhilosophyPanel, FooterPanel]
 const TOTAL  = PANELS.length
-
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(
-    typeof window !== 'undefined' ? window.innerWidth < 1024 : false
-  )
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 1023px)')
-    const handler = (e) => setIsMobile(e.matches)
-    mq.addEventListener('change', handler)
-    return () => mq.removeEventListener('change', handler)
-  }, [])
-  return isMobile
-}
 
 function useReducedMotionPref() {
   const [reduced, setReduced] = useState(
