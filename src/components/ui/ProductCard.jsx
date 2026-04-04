@@ -35,7 +35,7 @@ export default function ProductCard({ product, className = '' }) {
       </div>
 
       {/* Info block */}
-      <div className="p-5" style={{ backgroundColor: 'var(--kinari)' }}>
+      <div className="p-5">
         <p
           className="font-body"
           style={{ fontSize: '11px', color: 'rgba(26,23,20,0.5)', marginBottom: '6px' }}
@@ -60,7 +60,7 @@ export default function ProductCard({ product, className = '' }) {
             className="font-body"
             style={{ fontSize: '12px', color: 'var(--sumi)', letterSpacing: '1px' }}
           >
-            ¥{price.toLocaleString()}
+            ¥{price != null ? price.toLocaleString() : '—'}
           </span>
         </div>
       </div>
