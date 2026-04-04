@@ -1,0 +1,36 @@
+// src/data/products.js
+export const products = [
+  {
+    id: 'PRD_NO.082',
+    name: 'Shokupan',
+    nameJp: '食パン',
+    description: 'NIIGATA PEAR YEAST',
+    price: 880,
+    image: null,
+    aspect: 'portrait',
+    hasBadge: false,
+    placeholderColor: '#2A3558',
+  },
+  {
+    id: 'PRD_NO.041',
+    name: 'Hojicha Danish',
+    nameJp: 'ほうじ茶',
+    description: 'STONE-GROUND ROAST',
+    price: 520,
+    image: null,
+    aspect: 'landscape',
+    hasBadge: true,
+    placeholderColor: '#1A1714',
+  },
+  {
+    id: 'PRD_NO.119',
+    name: 'Miso Noir',
+    nameJp: '味噌ノワール',
+    description: '48HR FERMENT',
+    price: 960,
+    image: null,
+    aspect: 'wide',
+    hasBadge: false,
+    placeholderColor: '#3D2B1A',
+  },
+]
