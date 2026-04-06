@@ -1,28 +1,21 @@
 // src/components/panels/HeroPanel.jsx
-import { motion, useReducedMotion } from 'framer-motion'
 import PanKun         from '../mascot/PanKun.jsx'
 import CopperCrescent from '../mascot/CopperCrescent.jsx'
+import { useScrollY } from '../../hooks/useScrollY.js'
 
-const stagger = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
-}
-
-const fadeUp = {
-  hidden:  { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
-}
-
-export default function HeroPanel({ isActive, justEntered }) {
-  const prefersReduced = useReducedMotion()
-  const shouldAnimate = isActive || justEntered
+export default function HeroPanel() {
+  const scrollY      = useScrollY()
+  const bgOffset     = scrollY * 0.28
+  const crOffset     = -scrollY * 0.12
+  const pankunOffset = -scrollY * 0.08
 
   return (
     <section
+      id="hero"
       aria-label="Hero — PAN 製パン所"
       style={{
         width: '100%',
-        height: '100%',
+        minHeight: '100vh',
         backgroundColor: 'var(--ai)',
         display: 'flex',
         flexDirection: 'column',
@@ -32,29 +25,62 @@ export default function HeroPanel({ isActive, justEntered }) {
         overflow: 'hidden',
       }}
     >
-      {/* Decorative crescents */}
-      <CopperCrescent size={48} style={{ position: 'absolute', top: '20%', left: '15%', opacity: 0.7 }} animate={isActive} />
-      <CopperCrescent size={32} style={{ position: 'absolute', bottom: '25%', right: '18%', opacity: 0.5 }} animate={isActive} />
+      {/* Background image — slow parallax layer */}
+      <img
+        src="/hero-bg.png"
+        alt=""
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '110%',  /* extra height so parallax doesn't reveal edges */
+          objectFit: 'cover',
+          objectPosition: 'center',
+          opacity: 0.12,
+          mixBlendMode: 'luminosity',
+          pointerEvents: 'none',
+          userSelect: 'none',
+          transform: `translateY(${bgOffset}px)`,
+          willChange: 'transform',
+        }}
+      />
 
-      {/* Pan-kun top-left */}
-      <div style={{ position: 'absolute', top: '18%', left: '12%' }}>
-        <PanKun size={64} color="var(--kinu)" variant="default" animate={isActive} />
+      {/* Decorative crescents — medium parallax layer */}
+      <div style={{
+        position: 'absolute', top: '20%', left: '15%',
+        transform: `translateY(${crOffset}px)`,
+        willChange: 'transform',
+      }}>
+        <CopperCrescent size={48} style={{ opacity: 0.7 }} animate={true} />
+      </div>
+      <div style={{
+        position: 'absolute', bottom: '25%', right: '18%',
+        transform: `translateY(${crOffset}px)`,
+        willChange: 'transform',
+      }}>
+        <CopperCrescent size={32} style={{ opacity: 0.5 }} animate={true} />
       </div>
 
-      {/* Pan-kun bottom-right */}
-      <div style={{ position: 'absolute', bottom: '18%', right: '10%' }}>
-        <PanKun size={56} color="var(--akagane)" variant="default" animate={isActive} />
+      {/* PanKun mascots — slow parallax layer */}
+      <div style={{
+        position: 'absolute', top: '18%', left: '12%',
+        transform: `translateY(${pankunOffset}px)`,
+        willChange: 'transform',
+      }}>
+        <PanKun size={64} color="var(--kinu)" variant="default" animate={true} />
+      </div>
+      <div style={{
+        position: 'absolute', bottom: '18%', right: '10%',
+        transform: `translateY(${pankunOffset}px)`,
+        willChange: 'transform',
+      }}>
+        <PanKun size={56} color="var(--akagane)" variant="default" animate={true} />
       </div>
 
-      {/* Main wordmark content */}
-      <motion.div
-        variants={stagger}
-        initial="hidden"
-        animate={shouldAnimate && !prefersReduced ? 'visible' : 'hidden'}
-        style={{ textAlign: 'center', zIndex: 1 }}
-      >
-        <motion.h1
-          variants={fadeUp}
+      {/* Main wordmark — no parallax, stays anchored */}
+      <div style={{ textAlign: 'center', zIndex: 1 }}>
+        <h1
           className="font-display"
           style={{
             fontSize: 'clamp(80px, 14vw, 200px)',
@@ -64,9 +90,8 @@ export default function HeroPanel({ isActive, justEntered }) {
           }}
         >
           PAN
-        </motion.h1>
-        <motion.p
-          variants={fadeUp}
+        </h1>
+        <p
           className="font-kanji"
           style={{
             fontSize: 'clamp(28px, 4vw, 56px)',
@@ -78,8 +103,8 @@ export default function HeroPanel({ isActive, justEntered }) {
           }}
         >
           製パン所
-        </motion.p>
-      </motion.div>
+        </p>
+      </div>
     </section>
   )
 }

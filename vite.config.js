@@ -8,5 +8,6 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: './tests/setup.js',
+    base: 'https://github.com/gabriela-chirinos/japaneseBakery',
   },
 })

@@ -1,37 +1,36 @@
-import { useState, useCallback } from 'react'
-import PanelContainer from './components/layout/PanelContainer.jsx'
-import PersistentUI   from './components/layout/PersistentUI.jsx'
-import useIsMobile    from './hooks/useIsMobile.js'
+import SiteHeader    from './components/layout/SiteHeader.jsx'
+import HeroPanel      from './components/panels/HeroPanel.jsx'
+import ProductsPanel  from './components/panels/ProductsPanel.jsx'
+import PhilosophyPanel from './components/panels/PhilosophyPanel.jsx'
+import FooterPanel    from './components/panels/FooterPanel.jsx'
 
 export default function App() {
-  const [currentPanel, setCurrentPanel] = useState(0)
-  const isMobile = useIsMobile()
-  const [navigateFn, setNavigateFn] = useState(null)
-
-  const handlePanelChange = useCallback((index) => {
-    setCurrentPanel(index)
-  }, [])
-
-  const handleRegisterNavigate = useCallback((fn) => {
-    setNavigateFn(() => fn)
-  }, [])
-
-  const handleNavigate = useCallback((index) => {
-    navigateFn?.(index)
-  }, [navigateFn])
-
   return (
     <>
-      <PanelContainer
-        onPanelChange={handlePanelChange}
-        onRegisterNavigate={handleRegisterNavigate}
-      />
-      <PersistentUI
-        currentPanel={currentPanel}
-        onNavigate={handleNavigate}
-        isMobile={isMobile}
-        totalPanels={4}
-      />
+      <a
+        href="#main-content"
+        style={{
+          position: 'absolute',
+          left: '-9999px',
+          top: 'auto',
+          width: '1px',
+          height: '1px',
+          overflow: 'hidden',
+        }}
+        onFocus={e => Object.assign(e.target.style, { left: '16px', top: '16px', width: 'auto', height: 'auto' })}
+        onBlur={e => Object.assign(e.target.style, { left: '-9999px', top: 'auto', width: '1px', height: '1px' })}
+      >
+        Skip to main content
+      </a>
+
+      <SiteHeader />
+
+      <main id="main-content">
+        <HeroPanel />
+        <ProductsPanel />
+        <PhilosophyPanel />
+        <FooterPanel />
+      </main>
     </>
   )
 }

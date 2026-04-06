@@ -1,15 +1,6 @@
 // src/components/panels/FooterPanel.jsx
-import { motion, useReducedMotion } from 'framer-motion'
 import SectionLabel from '../ui/SectionLabel.jsx'
 import PanKun       from '../mascot/PanKun.jsx'
-
-const fadeUp = (delay = 0) => ({
-  hidden:  { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1, y: 0,
-    transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1], delay },
-  },
-})
 
 const labelStyle = {
   fontFamily: '"DM Sans", sans-serif',
@@ -31,32 +22,21 @@ const addressStyle = {
   lineHeight: 1.9,
 }
 
-export default function FooterPanel({ isActive, justEntered }) {
-  const shouldAnimate = isActive || justEntered
-  const prefersReduced = useReducedMotion()
-
+export default function FooterPanel() {
   return (
-    <section
+    <footer
+      id="contact"
       aria-label="Logistics and contact"
-      style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}
+      style={{ width: '100%' }}
     >
       {/* TOP HALF — Cream logistics */}
       <div
         style={{
-          flex: 1,
           backgroundColor: 'var(--kinu)',
-          padding: 'clamp(48px, 6vh, 80px) clamp(24px, 6vw, 80px) 40px',
-          display: 'flex',
-          flexDirection: 'column',
+          padding: 'clamp(48px, 6vh, 80px) clamp(24px, 6vw, 80px) 60px',
         }}
       >
-        <motion.div
-          variants={fadeUp(0)}
-          initial="hidden"
-          animate={shouldAnimate && !prefersReduced ? 'visible' : 'hidden'}
-        >
-          <SectionLabel number="03" label="LOGISTICS" labelJp="連絡" />
-        </motion.div>
+        <SectionLabel number="03" label="Find Us" labelJp="連絡" />
 
         <div
           style={{
@@ -66,7 +46,7 @@ export default function FooterPanel({ isActive, justEntered }) {
             marginTop: '40px',
           }}
         >
-          <motion.div variants={fadeUp(0.1)} initial="hidden" animate={shouldAnimate && !prefersReduced ? 'visible' : 'hidden'}>
+          <div>
             <p style={labelStyle}>HEADQUARTERS</p>
             <p style={addressStyle}>
               1-24-9 TOCHIGI-KEN<br />
@@ -74,36 +54,46 @@ export default function FooterPanel({ isActive, justEntered }) {
               <br />
               +81 (0) 25 223 4401
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div variants={fadeUp(0.15)} initial="hidden" animate={shouldAnimate && !prefersReduced ? 'visible' : 'hidden'}>
+          <div>
             <p style={labelStyle}>DIGITAL FOOTPRINT</p>
             <p style={addressStyle}>
               @PAN_SEIBANJO<br />
               HELLO@PAN-BAKERY.JP
             </p>
-            <p style={{ fontFamily: '"DM Sans", sans-serif', fontWeight: 500, fontSize: '12px', color: 'rgba(26,23,20,0.5)', marginTop: '16px', letterSpacing: '2px' }}>
+            <p style={{
+              fontFamily: '"DM Sans", sans-serif',
+              fontWeight: 500,
+              fontSize: '12px',
+              color: 'rgba(26,23,20,0.5)',
+              marginTop: '16px',
+              letterSpacing: '2px',
+            }}>
               [ EST. 1967 ]
             </p>
-          </motion.div>
+          </div>
+
+          <div>
+            <p style={labelStyle}>OPEN / 開店</p>
+            <p style={{ fontFamily: '"DM Sans", sans-serif', fontSize: '28px', color: 'var(--sumi)', letterSpacing: '2px' }}>
+              07:00&nbsp;&nbsp;18:00
+            </p>
+            <p style={{ fontFamily: '"DM Sans", sans-serif', fontWeight: 500, fontSize: '9px', letterSpacing: '2px', color: 'rgba(26,23,20,0.5)', marginTop: '6px', textTransform: 'uppercase' }}>
+              DAILY EXCEPT MONDAY / 月曜定休
+            </p>
+          </div>
         </div>
       </div>
 
       {/* BOTTOM HALF — Indigo footer */}
       <div
         style={{
-          flex: 1,
           backgroundColor: 'var(--ai)',
-          padding: 'clamp(32px, 4vh, 60px) clamp(24px, 6vw, 80px)',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
+          padding: 'clamp(48px, 6vh, 80px) clamp(24px, 6vw, 80px) 60px',
         }}
       >
-        <motion.div
-          variants={fadeUp(0.2)}
-          initial="hidden"
-          animate={shouldAnimate && !prefersReduced ? 'visible' : 'hidden'}
+        <div
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
@@ -137,17 +127,14 @@ export default function FooterPanel({ isActive, justEntered }) {
               </p>
             ))}
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div
-          variants={fadeUp(0.3)}
-          initial="hidden"
-          animate={shouldAnimate && !prefersReduced ? 'visible' : 'hidden'}
+        <div
           style={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginTop: '24px',
+            marginTop: '48px',
             flexWrap: 'wrap',
             gap: '12px',
           }}
@@ -156,8 +143,8 @@ export default function FooterPanel({ isActive, justEntered }) {
             © 2026 PAN 製パン所 INC. ALL RIGHTS RESERVED. MADE IN NIIGATA.
           </p>
           <PanKun size={32} color="rgba(244,240,232,0.5)" variant="default" animate={false} />
-        </motion.div>
+        </div>
       </div>
-    </section>
+    </footer>
   )
 }
