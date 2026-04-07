@@ -27,7 +27,7 @@ export default function HeroPanel() {
     >
       {/* Background image — slow parallax layer */}
       <img
-        src="/hero-bg.png"
+        src={`${import.meta.env.BASE_URL}hero-bg.png`}
         alt=""
         aria-hidden="true"
         style={{
